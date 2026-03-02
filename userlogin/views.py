@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from utils.fbmsg import FBMsg
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -6,6 +7,7 @@ import json
 from userprofile.models import Users
 from staff.models import ListModel as staff
 
+@csrf_exempt
 def login(request, *args, **kwargs):
     post_data = json.loads(request.body.decode())
     data = {

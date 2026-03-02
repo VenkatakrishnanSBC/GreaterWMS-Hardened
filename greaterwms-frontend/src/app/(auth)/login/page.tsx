@@ -94,6 +94,7 @@ export default function LoginPage() {
                                         <Label htmlFor="admin-name">Username</Label>
                                         <Input
                                             id="admin-name"
+                                            autoComplete="username"
                                             placeholder="Enter admin username"
                                             value={adminName}
                                             onChange={(e) => setAdminName(e.target.value)}
@@ -104,6 +105,7 @@ export default function LoginPage() {
                                         <Input
                                             id="admin-password"
                                             type="password"
+                                            autoComplete="current-password"
                                             placeholder="Enter password"
                                             value={adminPassword}
                                             onChange={(e) => setAdminPassword(e.target.value)}

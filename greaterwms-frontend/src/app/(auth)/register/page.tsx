@@ -63,6 +63,7 @@ export default function RegisterPage() {
                                 <Label htmlFor="name">Username</Label>
                                 <Input
                                     id="name"
+                                    autoComplete="username"
                                     placeholder="Choose a username"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
@@ -73,6 +74,7 @@ export default function RegisterPage() {
                                 <Input
                                     id="password1"
                                     type="password"
+                                    autoComplete="new-password"
                                     placeholder="Choose a password"
                                     value={password1}
                                     onChange={(e) => setPassword1(e.target.value)}
@@ -83,6 +85,7 @@ export default function RegisterPage() {
                                 <Input
                                     id="password2"
                                     type="password"
+                                    autoComplete="new-password"
                                     placeholder="Confirm your password"
                                     value={password2}
                                     onChange={(e) => setPassword2(e.target.value)}

@@ -57,47 +57,46 @@ export default function RegisterPage() {
                         <CardTitle>Register</CardTitle>
                         <CardDescription>Create a new warehouse account</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Username</Label>
-                            <Input
-                                id="name"
-                                placeholder="Choose a username"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && handleRegister()}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password1">Password</Label>
-                            <Input
-                                id="password1"
-                                type="password"
-                                placeholder="Choose a password"
-                                value={password1}
-                                onChange={(e) => setPassword1(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && handleRegister()}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password2">Confirm Password</Label>
-                            <Input
-                                id="password2"
-                                type="password"
-                                placeholder="Confirm your password"
-                                value={password2}
-                                onChange={(e) => setPassword2(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && handleRegister()}
-                            />
-                        </div>
-                        <Button
-                            className="w-full"
-                            onClick={handleRegister}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? "Creating account..." : "Create Account"}
-                        </Button>
-                        <div className="text-center">
+                    <CardContent>
+                        <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }} className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="name">Username</Label>
+                                <Input
+                                    id="name"
+                                    placeholder="Choose a username"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password1">Password</Label>
+                                <Input
+                                    id="password1"
+                                    type="password"
+                                    placeholder="Choose a password"
+                                    value={password1}
+                                    onChange={(e) => setPassword1(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password2">Confirm Password</Label>
+                                <Input
+                                    id="password2"
+                                    type="password"
+                                    placeholder="Confirm your password"
+                                    value={password2}
+                                    onChange={(e) => setPassword2(e.target.value)}
+                                />
+                            </div>
+                            <Button
+                                type="submit"
+                                className="w-full"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "Creating account..." : "Create Account"}
+                            </Button>
+                        </form>
+                        <div className="text-center pt-2">
                             <Button
                                 variant="link"
                                 className="text-sm text-muted-foreground"

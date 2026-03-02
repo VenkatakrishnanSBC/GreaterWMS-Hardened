@@ -87,69 +87,69 @@ export default function LoginPage() {
 
                         <CardContent className="space-y-4">
                             {/* Admin Login Tab */}
-                            <TabsContent value="admin" className="space-y-4 mt-0">
-                                <CardDescription>Sign in with your admin credentials</CardDescription>
-                                <div className="space-y-2">
-                                    <Label htmlFor="admin-name">Username</Label>
-                                    <Input
-                                        id="admin-name"
-                                        placeholder="Enter admin username"
-                                        value={adminName}
-                                        onChange={(e) => setAdminName(e.target.value)}
-                                        onKeyDown={(e) => e.key === "Enter" && handleAdminLogin()}
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="admin-password">Password</Label>
-                                    <Input
-                                        id="admin-password"
-                                        type="password"
-                                        placeholder="Enter password"
-                                        value={adminPassword}
-                                        onChange={(e) => setAdminPassword(e.target.value)}
-                                        onKeyDown={(e) => e.key === "Enter" && handleAdminLogin()}
-                                    />
-                                </div>
-                                <Button
-                                    className="w-full"
-                                    onClick={handleAdminLogin}
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? "Signing in..." : "Sign In"}
-                                </Button>
+                            <TabsContent value="admin" className="mt-0">
+                                <form onSubmit={(e) => { e.preventDefault(); handleAdminLogin(); }} className="space-y-4">
+                                    <CardDescription>Sign in with your admin credentials</CardDescription>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="admin-name">Username</Label>
+                                        <Input
+                                            id="admin-name"
+                                            placeholder="Enter admin username"
+                                            value={adminName}
+                                            onChange={(e) => setAdminName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="admin-password">Password</Label>
+                                        <Input
+                                            id="admin-password"
+                                            type="password"
+                                            placeholder="Enter password"
+                                            value={adminPassword}
+                                            onChange={(e) => setAdminPassword(e.target.value)}
+                                        />
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        className="w-full"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? "Signing in..." : "Sign In"}
+                                    </Button>
+                                </form>
                             </TabsContent>
 
                             {/* User Login Tab */}
-                            <TabsContent value="user" className="space-y-4 mt-0">
-                                <CardDescription>Sign in with your staff name and check code</CardDescription>
-                                <div className="space-y-2">
-                                    <Label htmlFor="staff-name">Staff Name</Label>
-                                    <Input
-                                        id="staff-name"
-                                        placeholder="Enter staff name"
-                                        value={staffName}
-                                        onChange={(e) => setStaffName(e.target.value)}
-                                        onKeyDown={(e) => e.key === "Enter" && handleUserLogin()}
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="check-code">Check Code</Label>
-                                    <Input
-                                        id="check-code"
-                                        type="number"
-                                        placeholder="Enter check code"
-                                        value={checkCode}
-                                        onChange={(e) => setCheckCode(e.target.value)}
-                                        onKeyDown={(e) => e.key === "Enter" && handleUserLogin()}
-                                    />
-                                </div>
-                                <Button
-                                    className="w-full"
-                                    onClick={handleUserLogin}
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? "Signing in..." : "Sign In"}
-                                </Button>
+                            <TabsContent value="user" className="mt-0">
+                                <form onSubmit={(e) => { e.preventDefault(); handleUserLogin(); }} className="space-y-4">
+                                    <CardDescription>Sign in with your staff name and check code</CardDescription>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="staff-name">Staff Name</Label>
+                                        <Input
+                                            id="staff-name"
+                                            placeholder="Enter staff name"
+                                            value={staffName}
+                                            onChange={(e) => setStaffName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="check-code">Check Code</Label>
+                                        <Input
+                                            id="check-code"
+                                            type="number"
+                                            placeholder="Enter check code"
+                                            value={checkCode}
+                                            onChange={(e) => setCheckCode(e.target.value)}
+                                        />
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        className="w-full"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? "Signing in..." : "Sign In"}
+                                    </Button>
+                                </form>
                             </TabsContent>
 
                             {/* Register Link */}

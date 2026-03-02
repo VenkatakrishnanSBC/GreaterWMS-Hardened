@@ -294,7 +294,6 @@
 <script>
 import { getauth, postauth, putauth, deleteauth } from 'boot/axios_request'
 import { LocalStorage } from 'quasar'
-import axios from 'axios'
 
 export default {
   name: 'Pagewarehouse',
@@ -581,7 +580,7 @@ export default {
       var _this = this
       _this.publishdetail.openid = LocalStorage.getItem('openid')
       _this.publishdetail.square_measure = _this.square_measure
-      axios.post('https://po.56yhz.com/warehouse/', _this.publishdetail
+      postauth('warehouse/publish/', _this.publishdetail
       ).then(res => {
         _this.publishCancel()
         _this.getList()
@@ -602,7 +601,7 @@ export default {
       var _this = this
       _this.publishdetail = e
       _this.publishdetail.openid = LocalStorage.getItem('openid')
-      axios.put('https://po.56yhz.com/warehouse/', _this.publishdetail
+      putauth('warehouse/unpublish/', _this.publishdetail
       ).then(res => {
         _this.publishCancel()
         _this.getList()

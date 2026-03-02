@@ -64,7 +64,7 @@ module.exports = function (/* ctx */) {
       // extractCSS: false,
 
       // https://quasar.dev/quasar-cli/handling-webpack
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         cfg.module.rules.push({
           resourceQuery: /blockType=i18n/,
           type: 'javascript/auto',
@@ -231,12 +231,7 @@ module.exports = function (/* ctx */) {
         appId: 'com.electron.greaterwms',
         productName: 'GreaterWMS',
         copyright: '2022SR0153577',
-        publish: [
-          {
-            provider: 'generic',
-            url: 'https://production.56yhz.com/media/'
-          }
-        ],
+        publish: [],
         mac: {
           target: 'dmg'
         },
@@ -273,7 +268,7 @@ module.exports = function (/* ctx */) {
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
 
-      extendWebpack (/* cfg */) {
+      extendWebpack(/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       }

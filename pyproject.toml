@@ -1,0 +1,38 @@
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "greaterwms.settings"
+python_files = ["tests/*.py", "test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--cov=. --cov-report=html --cov-report=term-missing -v"
+markers = [
+    "unit: Unit tests (fast, no DB)",
+    "integration: Integration tests (DB required)",
+    "slow: Slow tests (network, large data)",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "manage.py",
+    "greaterwms/asgi.py",
+    "greaterwms/wsgi.py",
+    "templates/*",
+    "static/*",
+    ".agents/*",
+]
+
+[tool.coverage.report]
+fail_under = 20
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.",
+    "raise NotImplementedError",
+]

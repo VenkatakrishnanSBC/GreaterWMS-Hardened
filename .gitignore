@@ -1,0 +1,22 @@
+node_modules/
+__pycache__/
+Authorization/
+authorization.txt
+authorization.json
+db.sqlite3
+.idea/
+delete.py
+*.xlsx
+logs/
+bfg.jar
+error.log
+server.log
+/.history/
+
+# SECURITY: Never commit environment files or secrets (SEC-013 / ISS-013)
+.env
+.env.local
+.env.production
+*.pem
+*.key
+media/

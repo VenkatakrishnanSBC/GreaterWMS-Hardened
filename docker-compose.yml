@@ -1,0 +1,71 @@
+# GreaterWMS Docker Compose Configuration
+# DEVOPS-001 / ISS-022: Removed privileged:true, added security_opt, health checks
+# DEVOPS-002: Read-only mounts where possible
+
+version: '3.9'
+
+networks:
+  basic:
+
+
+services:
+  front:
+    container_name: greaterwms_front
+    image: greaterwms/greaterwms:front
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: front
+    restart: unless-stopped
+    # SECURITY: Removed privileged:true (DEVOPS-001 / ISS-022)
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - '8080:8080'
+    depends_on:
+      backend:
+        condition: service_healthy
+    volumes:
+      - ./templates:/GreaterWMS/templates:rw
+      - ./web_start.sh:/GreaterWMS/templates/web_start.sh:ro
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - basic
+
+  backend:
+    container_name: greaterwms_backend
+    image: greaterwms/greaterwms:backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: backend
+    restart: unless-stopped
+    # SECURITY: Removed privileged:true (DEVOPS-001 / ISS-022)
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./:/GreaterWMS/:rw
+      - ./supervisord.conf:/etc/supervisor/supervisord.conf:ro
+    ports:
+      - '8008:8008'
+    environment:
+      PYTHONUNBUFFERED: 1
+      DEBUG: ${DEBUG:-False}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-}
+      JWT_SALT: ${JWT_SALT:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      CORS_ORIGIN_WHITELIST: ${CORS_ORIGIN_WHITELIST:-http://localhost:8080}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-http://localhost:8080}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8008/api/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - basic

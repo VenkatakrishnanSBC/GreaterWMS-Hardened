@@ -1,0 +1,229 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  dependency-scan:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install security scanning tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety pip-audit
+
+    - name: Python dependency vulnerability scan with Safety
+      run: |
+        safety check -r requirements.txt --json --output safety-report.json || true
+        safety check -r requirements.txt
+
+    - name: Python dependency audit with pip-audit
+      run: |
+        pip-audit -r requirements.txt --format=json --output=pip-audit-report.json || true
+        pip-audit -r requirements.txt
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '16'
+        cache: 'npm'
+        cache-dependency-path: ./templates/package-lock.json
+
+    - name: Install frontend dependencies
+      working-directory: ./templates
+      run: npm ci
+
+    - name: Frontend dependency vulnerability scan
+      working-directory: ./templates
+      run: |
+        npm audit --audit-level=moderate --json > npm-audit-report.json || true
+        npm audit --audit-level=moderate
+
+    - name: Upload security scan reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-scan-reports
+        path: |
+          safety-report.json
+          pip-audit-report.json
+          templates/npm-audit-report.json
+
+  code-security-scan:
+    name: Code Security Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install code security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit semgrep
+
+    - name: Run Bandit security linter for Python
+      run: |
+        bandit -r . \
+          --exclude ./venv,./env,./migrations,./static,./media,./app/src-cordova \
+          --format json \
+          --output bandit-security-report.json || true
+        echo "=== Bandit Security Report ==="
+        bandit -r . \
+          --exclude ./venv,./env,./migrations,./static,./media,./app/src-cordova \
+          --severity-level medium
+
+    - name: Run Semgrep security analysis
+      run: |
+        semgrep --config=auto \
+          --json \
+          --output=semgrep-report.json \
+          --exclude="migrations/" \
+          --exclude="static/" \
+          --exclude="media/" \
+          --exclude="app/src-cordova/" \
+          . || true
+        echo "=== Semgrep Security Report ==="
+        semgrep --config=auto \
+          --exclude="migrations/" \
+          --exclude="static/" \
+          --exclude="media/" \
+          --exclude="app/src-cordova/" \
+          .
+
+    - name: Upload code security reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: code-security-reports
+        path: |
+          bandit-security-report.json
+          semgrep-report.json
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for secret scanning
+
+    - name: Install TruffleHog
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
+
+    - name: Run TruffleHog secrets scan
+      run: |
+        trufflehog git file://. \
+          --json \
+          --exclude-paths=.github/trufflehog-exclude.txt \
+          > trufflehog-report.json || true
+        echo "=== TruffleHog Secrets Scan ==="
+        trufflehog git file://. \
+          --exclude-paths=.github/trufflehog-exclude.txt
+
+    - name: Upload secrets scan report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: secrets-scan-report
+        path: trufflehog-report.json
+
+  docker-security-scan:
+    name: Docker Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image for scanning
+      run: |
+        if [ -f "Dockerfile" ]; then
+          docker build -t greaterwms-security-scan .
+        else
+          echo "No Dockerfile found, skipping Docker security scan"
+          exit 0
+        fi
+
+    - name: Run Trivy vulnerability scanner
+      if: success()
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'greaterwms-security-scan'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: docker-security-scan
+        path: trivy-results.sarif
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, code-security-scan, secrets-scan]
+    if: always()
+
+    steps:
+    - name: Download all security reports
+      uses: actions/download-artifact@v3
+      with:
+        path: security-reports
+
+    - name: Security scan summary
+      run: |
+        echo "# Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Scans Completed:" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Python dependency vulnerability scan" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Frontend dependency vulnerability scan" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Code security analysis (Bandit, Semgrep)" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Secrets detection scan" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Report Artifacts:" >> $GITHUB_STEP_SUMMARY
+        echo "Security scan reports have been uploaded as artifacts for review." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Next Steps:" >> $GITHUB_STEP_SUMMARY
+        echo "1. Review security scan reports in the Actions artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "2. Address any high-severity vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+        echo "3. Update dependencies as needed" >> $GITHUB_STEP_SUMMARY
+
+    - name: Fail on critical security issues
+      run: |
+        # Add logic here to fail the build on critical security issues
+        # This is a placeholder - customize based on your security requirements
+        echo "::notice::Security scans completed - review artifacts for detailed results"

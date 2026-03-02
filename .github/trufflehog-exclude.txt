@@ -1,0 +1,59 @@
+# TruffleHog exclusions for GreaterWMS
+# Add paths that should be excluded from secrets scanning
+
+# Static files and assets
+static/
+media/
+templates/dist/
+templates/node_modules/
+app/src-cordova/
+
+# Build artifacts
+*.log
+*.min.js
+*.map
+
+# Documentation and examples
+README*.md
+CHANGELOG.md
+docs/
+*.example
+*.sample
+
+# Configuration templates (not actual configs)
+*.template
+*.dist
+
+# Test files with dummy data
+**/test*/**
+**/*test*
+**/*.test.*
+tests/
+
+# Package files
+package-lock.json
+yarn.lock
+requirements.txt
+
+# Git and CI files
+.git/
+.github/
+.gitignore
+
+# Virtual environments
+venv/
+env/
+node_modules/
+
+# Database migrations (may contain example data)
+migrations/
+
+# Compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*

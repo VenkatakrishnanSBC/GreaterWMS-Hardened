@@ -39,5 +39,5 @@ def init_category():
                 ls(id=7, openid='init_data', staff_type='StockControl', creater='GreaterWMS')
             ]
             ls.objects.bulk_create(init_data, batch_size=100)
-    except (KeyError, ValueError, TypeError):
+    except (KeyError, ValueError, TypeError, Exception):
         pass

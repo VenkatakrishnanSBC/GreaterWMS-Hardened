@@ -1,7 +1,6 @@
 """
 User registration view.
 
-ARCH-006: Demo data seeding extracted to `userregister.seeddata`.
 CODE-005: Flattened deeply nested if/else to guard clauses.
 """
 import json
@@ -15,13 +14,11 @@ from django.utils.decorators import method_decorator
 from django.contrib import auth
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.db import transaction
 
 from userprofile.models import Users
 from utils.fbmsg import FBMsg
 from utils.md5 import Md5
 from staff.models import ListModel as staff
-from .seeddata import seed_demo_data
 
 logger = logging.getLogger(__name__)
 
@@ -42,14 +39,10 @@ def _get_client_ip(request: HttpRequest) -> str:
     )
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-@transaction.atomic  # DB-001: Entire registration is atomic
+@csrf_exempt
 def register(request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
     """
-    Register a new user account and seed demo data.
-
-    CODE-005: Flattened from 8 levels of nesting to flat guard clauses.
-    ARCH-006: Demo data creation delegated to seeddata module.
+    Register a new user account.
 
     Args:
         request: HTTP POST with JSON body containing name, password1, password2.
@@ -63,7 +56,7 @@ def register(request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
     password2 = post_data.get('password2')
     ip = _get_client_ip(request)
 
-    # --- Validation (guard clauses instead of nested if/else) ---
+    # --- Validation ---
     if Users.objects.filter(name=str(name), developer=1, is_delete=0).exists():
         return _make_error(FBMsg.err_user_same, ip, name)
 
@@ -100,9 +93,6 @@ def register(request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         openid=transaction_code, staff_name=str(name),
         staff_type='Admin', check_code=check_code
     ).first().id
-
-    # --- Seed demo data (ARCH-006: extracted to separate module) ---
-    seed_demo_data(transaction_code)
 
     logger.info(f"New user registered: {name} (openid={transaction_code})")
 

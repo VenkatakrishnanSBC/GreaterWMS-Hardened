@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download as DownloadIcon, FileDown } from "lucide-react";
+import { ArrowDownToLine, FolderDown } from "lucide-react";
 
 const downloadTypes = [
     { title: "Inbound Data", endpoint: "downloadcenter/inbound/", desc: "Export inbound/ASN records" },
@@ -24,14 +24,14 @@ export default function DownloadPage() {
                     <Card key={item.title} className="hover:border-primary/50 transition-colors">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
-                                <FileDown className="h-5 w-5 text-primary" />
+                                <FolderDown className="h-5 w-5 text-primary" />
                                 {item.title}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <p className="text-sm text-muted-foreground">{item.desc}</p>
                             <Button variant="outline" className="w-full">
-                                <DownloadIcon className="h-4 w-4 mr-2" /> Export Excel
+                                <ArrowDownToLine className="h-4 w-4 mr-2" /> Export Excel
                             </Button>
                         </CardContent>
                     </Card>

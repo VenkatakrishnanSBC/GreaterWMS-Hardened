@@ -3,12 +3,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-    PackagePlus,
-    Truck,
-    Layers,
-    AlertTriangle,
-    TrendingUp,
-    TrendingDown,
+    PackageCheck,
+    Send,
+    Archive,
+    ShieldAlert,
+    Activity,
+    LineChart,
     ArrowUpRight,
     ArrowDownRight,
 } from "lucide-react";
@@ -129,28 +129,28 @@ export default function DashboardPage() {
                             value={stats?.total_inbound || 0}
                             change="+12%"
                             trend="up"
-                            icon={PackagePlus}
+                            icon={PackageCheck}
                         />
                         <StatsCard
                             title="Total Outbound"
                             value={stats?.total_outbound || 0}
                             change="+8%"
                             trend="up"
-                            icon={Truck}
+                            icon={Send}
                         />
                         <StatsCard
                             title="Stock Items"
                             value="2,847"
                             change="-3%"
                             trend="down"
-                            icon={Layers}
+                            icon={Archive}
                         />
                         <StatsCard
                             title="Alerts"
                             value="12"
                             change="+2"
                             trend="up"
-                            icon={AlertTriangle}
+                            icon={ShieldAlert}
                         />
                     </>
                 )}
@@ -161,7 +161,7 @@ export default function DashboardPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <TrendingUp className="h-5 w-5 text-primary" />
+                            <Activity className="h-5 w-5 text-primary" />
                             Inbound vs Outbound
                         </CardTitle>
                     </CardHeader>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <TrendingDown className="h-5 w-5 text-primary" />
+                            <LineChart className="h-5 w-5 text-primary" />
                             Stock Trend
                         </CardTitle>
                     </CardHeader>

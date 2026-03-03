@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/stores/auth-store";
-import { Settings, Globe } from "lucide-react";
+import { Bolt, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -41,7 +41,7 @@ export function AppHeader() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
-                            <Globe className="h-4 w-4" />
+                            <Languages className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-40">
@@ -59,7 +59,7 @@ export function AppHeader() {
                     size="icon"
                     onClick={() => window.open("/api/docs/", "_blank")}
                 >
-                    <Settings className="h-4 w-4" />
+                    <Bolt className="h-4 w-4" />
                 </Button>
 
                 {/* Version Badge */}

@@ -3,22 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-    LayoutDashboard,
-    PackageOpen,
-    Truck,
-    Boxes,
-    Package,
-    Building2,
-    Container,
-    BadgeDollarSign,
-    UserCog,
-    Route,
-    CloudUpload,
-    CloudDownload,
+    BarChart3,
+    PackageCheck,
+    Send,
+    Archive,
+    ScanBarcode,
+    Landmark,
+    Banknote,
+    UsersRound,
+    CarFront,
+    ArrowUpFromLine,
+    ArrowDownToLine,
     Moon,
     Sun,
     LogOut,
     ChevronLeft,
+    Boxes,
     Warehouse,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -28,22 +28,22 @@ import { useAuthStore } from "@/stores/auth-store";
 import { useState } from "react";
 
 const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
     { type: "separator" as const },
-    { name: "Inbound", href: "/inbound/asn", icon: PackageOpen },
-    { name: "Outbound", href: "/outbound/dn", icon: Truck },
-    { name: "Stock", href: "/stock/list", icon: Boxes },
+    { name: "Inbound", href: "/inbound/asn", icon: PackageCheck },
+    { name: "Outbound", href: "/outbound/dn", icon: Send },
+    { name: "Stock", href: "/stock/list", icon: Archive },
     { type: "separator" as const },
-    { name: "Finance", href: "/finance/capital", icon: BadgeDollarSign },
-    { name: "Goods", href: "/goods/list", icon: Package },
-    { name: "Base Info", href: "/baseinfo/company", icon: Building2 },
-    { name: "Warehouse", href: "/warehouse/settings", icon: Container },
+    { name: "Finance", href: "/finance/capital", icon: Banknote },
+    { name: "Goods", href: "/goods/list", icon: ScanBarcode },
+    { name: "Base Info", href: "/baseinfo/company", icon: Landmark },
+    { name: "Warehouse", href: "/warehouse/settings", icon: Warehouse },
     { type: "separator" as const },
-    { name: "Staff", href: "/staff/list", icon: UserCog },
-    { name: "Drivers", href: "/driver/list", icon: Route },
+    { name: "Staff", href: "/staff/list", icon: UsersRound },
+    { name: "Drivers", href: "/driver/list", icon: CarFront },
     { type: "separator" as const },
-    { name: "Upload", href: "/upload", icon: CloudUpload },
-    { name: "Download", href: "/download", icon: CloudDownload },
+    { name: "Upload", href: "/upload", icon: ArrowUpFromLine },
+    { name: "Download", href: "/download", icon: ArrowDownToLine },
 ];
 
 export function AppSidebar() {
@@ -63,7 +63,7 @@ export function AppSidebar() {
             <div className="flex h-14 items-center border-b px-4">
                 {!collapsed && (
                     <Link href="/dashboard" className="flex items-center gap-2">
-                        <Warehouse className="h-6 w-6 text-primary" />
+                        <Boxes className="h-6 w-6 text-primary" />
                         <span className="text-lg font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
                             GreaterWMS
                         </span>

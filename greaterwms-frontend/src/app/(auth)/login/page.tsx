@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Warehouse } from "lucide-react";
+import { Boxes } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -65,7 +65,7 @@ export default function LoginPage() {
                 {/* Logo */}
                 <div className="text-center space-y-2">
                     <div className="inline-flex items-center justify-center rounded-xl bg-primary/10 p-3">
-                        <Warehouse className="h-8 w-8 text-primary" />
+                        <Boxes className="h-8 w-8 text-primary" />
                     </div>
                     <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
                         GreaterWMS

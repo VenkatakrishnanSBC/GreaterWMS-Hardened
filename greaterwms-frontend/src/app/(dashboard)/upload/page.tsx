@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Upload as UploadIcon, FileUp } from "lucide-react";
+import { ArrowUpFromLine, FolderUp } from "lucide-react";
 
 export default function UploadPage() {
     return (
@@ -21,14 +21,14 @@ export default function UploadPage() {
                     <Card key={item.title} className="hover:border-primary/50 transition-colors">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
-                                <FileUp className="h-5 w-5 text-primary" />
+                                <FolderUp className="h-5 w-5 text-primary" />
                                 {item.title}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <p className="text-sm text-muted-foreground">{item.desc}</p>
                             <Button className="w-full">
-                                <UploadIcon className="h-4 w-4 mr-2" /> Upload File
+                                <ArrowUpFromLine className="h-4 w-4 mr-2" /> Upload File
                             </Button>
                         </CardContent>
                     </Card>
